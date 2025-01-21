@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login and Department Links</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f8ff;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .login-container, .department-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            display: none;
+        }
+        .login-container.active, .department-container.active {
+            display: block;
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .logo img {
+            width: 100px;
+            height: auto;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #003366;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .department-links {
+            margin-top: 20px;
+        }
+        .department-links button {
+            margin: 5px 0;
+            background-color: #007BFF;
+            border-radius: 5px;
+        }
+        .department-links button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    <script>
+        const credentials = {
+            HR: {
+                id: "hr123",
+                password: "hrpass",
+                links: [
+                    { name: "Resource Requisition Form", url: "https://docs.google.com/forms/d/e/1FAIpQLSdSPCTj0OHD_p_KA7Ci6-zW3-lh2YIcnsYO-RpJ2dy81rJ09A/viewform" },
+                    { name: "Job Roll Form", url: "https://docs.google.com/forms/d/e/1FAIpQLSdeYHmS1UlKym8N__6v8qSLirvOaa8F8UPw9R8jrG8JxbufQ/viewform" }
+                ]
+            },
+            Sales: {
+                id: "sales123",
+                password: "salespass",
+                links: [
+                    { name: "Checklist Dashboard", url: "https://lookerstudio.google.com/reporting/b1a80064-5c98-4e82-86a5-4b6255ef3997/page/CeVZE" }
+                ]
+            },
+            MIS: {
+                id: "mis123",
+                password: "mispass",
+                links: [
+                    { name: "FMS", url: "https://docs.google.com/spreadsheets/d/17bDCt5vi4fGUk6FKmBhq8n8txS6aRswbdDqWPEOYLk/edit?gid=372983513" }
+                ]
+            },
+            Production: {
+                id: "prod123",
+                password: "prodpass",
+                links: [
+                    { name: "Production Form", url: "#" }
+                ]
+            },
+            Purchase: {
+                id: "pur123",
+                password: "purpass",
+                links: [
+                    { name: "Purchase Dashboard", url: "#" }
+                ]
+            },
+            Account: {
+                id: "acc123",
+                password: "accpass",
+                links: [
+                    { name: "Account Form", url: "#" }
+                ]
+            },
+            PC: {
+                id: "pc123",
+                password: "pcpass",
+                links: [
+                    { name: "PC Resources", url: "#" }
+                ]
+            },
+            EA: {
+                id: "ea123",
+                password: "eapass",
+                links: [
+                    { name: "EA Tools", url: "#" }
+                ]
+            }
+        };
+
+        function login() {
+            const userId = document.getElementById("userId").value;
+            const password = document.getElementById("password").value;
+            const department = document.getElementById("department").value;
+
+            if (!userId || !password || !department) {
+                alert("Please fill all fields.");
+                return;
+            }
+
+            const deptCredentials = credentials[department];
+            if (deptCredentials && userId === deptCredentials.id && password === deptCredentials.password) {
+                displayDepartment(department);
+            } else {
+                alert("Invalid credentials for " + department + ".");
+            }
+        }
+
+        function displayDepartment(department) {
+            document.querySelector(".login-container").classList.remove("active");
+            document.querySelector(".department-container").classList.add("active");
+
+            document.getElementById("department-title").textContent = department + " Department";
+            const linksContainer = document.getElementById("department-links");
+            linksContainer.innerHTML = ""; // Clear previous links
+
+            // Add department-specific links
+            credentials[department].links.forEach(link => {
+                const button = document.createElement("button");
+                button.textContent = link.name;
+                button.onclick = () => window.open(link.url, "_blank"); // Open link in new tab
+                linksContainer.appendChild(button);
+            });
+        }
+    </script>
+</head>
+<body>
+    <!-- Login Section -->
+    <div class="login-container active">
+        <div class="logo">
+            <img src="https://media.licdn.com/dms/image/v2/D560BAQGbuMY9fb99Vg/company-logo_200_200/company-logo_200_200/0/1711022277300/metatek_engineering_private_limited_logo?e=2147483647&v=beta&t=0W9lXq0_Z9RGLkhC7pURijBlcDVMok5xnUa8hU2J4zA" alt="Company Logo">
+        </div>
+        <h2>Login</h2>
+        <label for="userId">User ID:</label>
+        <input type="text" id="userId" placeholder="Enter your User ID">
+        <label for="password">Password:</label>
+        <input type="password" id="password" placeholder="Enter your Password">
+        <label for="department">Select Department:</label>
+        <select id="department">
+            <option value="">--Select--</option>
+            <option value="HR">HR</option>
+            <option value="Sales">Sales</option>
+            <option value="MIS">MIS</option>
+            <option value="Production">Production</option>
+            <option value="Purchase">Purchase</option>
+            <option value="Account">Account</option>
+            <option value="PC">PC</option>
+            <option value="EA">EA</option>
+        </select>
+        <button onclick="login()">Login</button>
+    </div>
+
+    <!-- Department Links Section -->
+    <div class="department-container">
+        <h2 id="department-title"></h2>
+        <div id="department-links" class="department-links"></div>
+    </div>
+</body>
+</html>
